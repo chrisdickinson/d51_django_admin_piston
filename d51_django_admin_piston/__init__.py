@@ -37,7 +37,10 @@ def get_handler_for_modeladmin(modeladmin, info):
 def wrapped_piston_urls(self, urls):
     if getattr(self, 'no_piston', False) is False:
         info = self.model._meta.app_label, self.model._meta.module_name
-        resource_obj = resource.Resource(handler=get_handler_for_modeladmin(self, info))
+
+        handler_cls = getattr(self, 'piston_handler', get_handler_for_modeladmin(self, info))
+        resource_cls = getattr(self, 'piston_resource', resource.Resource)
+        resource_obj = resource_cls(handler=handler_cls)
         urls = patterns('',
             url(r'^api/(?P<emitter_format>\w+)', resource_obj, name='admin-piston-%s-%s' % info)
         ) + urls
