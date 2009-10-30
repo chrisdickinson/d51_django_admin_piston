@@ -2,8 +2,8 @@ from django.conf.urls.defaults import *
 from piston import handler, resource
 from django.core.exceptions import FieldError
 from django.http import Http404
-
-
+from django.conf import settings
+API_URL = getattr(settings, 'D51_DJANGO_ADMIN_PISTON_URL', 'api')
 
 def wrap_instancemethod(imeth, with_function):
     with_instancemethod = type(imeth)(with_function, imeth.im_self, imeth.im_class)
@@ -42,7 +42,7 @@ def wrapped_piston_urls(self, urls):
         resource_cls = getattr(self, 'piston_resource', resource.Resource)
         resource_obj = resource_cls(handler=handler_cls)
         urls = patterns('',
-            url(r'^api/(?P<emitter_format>\w+)', resource_obj, name='admin-piston-%s-%s' % info)
+            url(r'^%s/(?P<emitter_format>\w+)' % API_URL, resource_obj, name='admin-piston-%s-%s' % info)
         ) + urls
     return urls 
 
