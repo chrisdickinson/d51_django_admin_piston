@@ -41,8 +41,6 @@ def wrapped_piston_urls(self, urls):
         urls = patterns('',
             url(r'^api/(?P<emitter_format>\w+)', resource_obj, name='admin-piston-%s-%s' % info)
         ) + urls
-        print urls
-
     return urls 
 
 def autodiscover(site):
