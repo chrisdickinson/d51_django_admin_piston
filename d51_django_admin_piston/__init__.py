@@ -46,7 +46,14 @@ def wrapped_piston_urls(self, urls):
         ) + urls
     return urls 
 
+LOADING = False
+
 def autodiscover(site):
+    global LOADING
+    if LOADING:
+        return
+    LOADING = True
     for model in site._registry:
         model_admin = site._registry[model]
         model_admin.get_urls = wrap_instancemethod(model_admin.get_urls, wrapped_piston_urls)
+    LOADING = False
