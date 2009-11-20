@@ -22,8 +22,8 @@ class D51AdminPiston(handler.BaseHandler):
         query = {}
         [query.update({str(key):request.GET[key]}) for key in request.GET if key not in control_keys]
         try:
-            page = request.GET.get('page', 0)
-            page_by = request.GET.get('page_by', 15)
+            page = int(request.GET.get('page', 0))
+            page_by = int(request.GET.get('page_by', 15))
             start = page*page_by
             finish = (page+1)*page_by
             return self.model.objects.complex_filter(query)[start:finish]
